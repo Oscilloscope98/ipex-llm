@@ -1,5 +1,75 @@
 # Chronos User Guide
 
+### **How to install Chronos?**
+```eval_rst
+.. raw:: html
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/chronos_installation_guide.css" />
+
+    <div class="displayed">
+        <table id="table-1" style="margin:auto">
+            <thead>
+                <th>AI Framework</th>
+                <th colspan="1"><button id="pytorch"
+                        title="Use PyTorch as deep learning models' backend. Most of the model support and works better under PyTorch.">PyTorch</br>(Recommended)</button>
+                </th>
+                <th colspan="1"><button id="tensorflow"
+                        title="Use Tensorflow as deep learning models' backend.">Tensorflow</button></th>
+                <th colspan="1"><button id="prophet" title="For Prophet model.">Prophet</button></th>
+                <th colspan="1"><button id="pmdarima" title="For ARIMA model.">pmdarima</button></th>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>OS</td>
+                    <td colspan="2"><button id="linux" title="Ubuntu/CentOS is recommended">Linux</button></td>
+                    <td colspan="2"><button id="win" title="WSL is needed for Windows users">Windows</button></td>
+                </tr>
+
+                <tr>
+                    <td>Auto Tuning</td>
+                    <td colspan="2" title="I don't need any hyperparameter auto tuning feature."><button
+                            id="automlno">No need</button></td>
+                    <td colspan="2" title="I need chronos to help me tune the hyperparameters."><button
+                            id="automlyes">Needed</button></td>
+                </tr>
+
+
+                <tr>
+                    <td>Hardware</td>
+                    <td colspan="2"><button id="singlenode" title="For users use laptop/single node server.">Single
+                            node</button></td>
+                    <td colspan="2"><button id="cluster" title="For users use K8S/Yarn Cluster.">Cluster</button></td>
+                </tr>
+
+                <tr>
+                    <td>Release</td>
+                    <td colspan="2"><button id="pypi" title="For users use laptop/single node server.">Pip</button></td>
+                    <td colspan="2"><button id="docker" title="For users use K8S/Yarn Cluster.">Docker</button></td>
+                </tr>
+
+                <tr>
+                    <td>Build</td>
+                    <td colspan="2"><button id="stable"
+                            title="For users would like to deploy chronos in their production">Stable (2.0.0)</button>
+                    </td>
+                    <td colspan="2"><button id="nightly"
+                            title="For users would like to try chronos's latest feature">Nightly (2.1.0b)</button></td>
+                </tr>
+
+                <tr>
+                    <td>Install CMD</td>
+                    <td colspan="4">
+                        <div id="cmd" style="text-align: left;">NA</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="../../../_static/js/chronos_installation_guide.js"></script> 
+```
+
 ### **1. Overview**
 _Chronos_ is an application framework for building large-scale time series analysis applications.
 
