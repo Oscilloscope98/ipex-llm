@@ -37,12 +37,17 @@ sys.path.insert(0, os.path.abspath("../../../python/nano/src/"))
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "repository_url": "https://github.com/intel-analytics/BigDL",
+    "repository_branch": "main",
     "use_repository_button": True,
-    "use_issues_button": True,
     "use_edit_page_button": True,
-    "path_to_docs": "doc/source",
-    "home_page_in_toc": True,
+    "use_download_button": False,
+    "use_fullscreen_button": False,
+    "use_issues_button": False,
+    "path_to_docs": "docs/readthedocs/source",
+    "logo_only": True
 }
+
+html_logo = "../image/bigdl_logo.png"
 
 # The suffix of source filenames.
 from recommonmark.parser import CommonMarkParser
