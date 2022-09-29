@@ -43,11 +43,11 @@ html_theme_options = {
     "use_download_button": False,
     "use_fullscreen_button": False,
     "use_issues_button": False,
-    "path_to_docs": "docs/readthedocs/source",
-    "logo_only": True
+    "path_to_docs": "docs/readthedocs/source"
 }
 
 html_logo = "../image/bigdl_logo.png"
+html_title = "BigDL 2.1.0"
 
 # The suffix of source filenames.
 from recommonmark.parser import CommonMarkParser
