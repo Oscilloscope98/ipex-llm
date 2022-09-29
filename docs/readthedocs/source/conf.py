@@ -31,10 +31,10 @@ sys.path.insert(0, os.path.abspath("../../../python/serving/src/"))
 sys.path.insert(0, os.path.abspath("../../../python/nano/src/"))
 
 # -- Project information -----------------------------------------------------
-import sphinx_rtd_theme
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-#html_theme = "sphinx_book_theme"
+# import sphinx_rtd_theme
+# html_theme = "sphinx_rtd_theme"
+# html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = "sphinx_book_theme"
 html_theme_options = {
     "repository_url": "https://github.com/intel-analytics/BigDL",
     "use_repository_button": True,
