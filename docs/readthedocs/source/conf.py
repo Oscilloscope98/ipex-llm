@@ -33,6 +33,20 @@ sys.path.insert(0, os.path.abspath("../../../python/nano/src/"))
 # -- Project information -----------------------------------------------------
 html_theme = "furo"
 
+html_theme_options = {
+    "light_css_variables": {
+        "color-brand-primary": "#1B72BA",
+        "color-brand-content": "#1B72BA",
+    },
+    "top_of_page_button": "edit",
+    "source_repository": "https://github.com/intel-analytics/BigDL",
+    "source_branch": "main",
+    "source_directory": "docs/readthedocs/source",
+}
+
+html_logo = "../image/bigdl_logo.png"
+html_title = "2.1.0"
+
 # The suffix of source filenames.
 from recommonmark.parser import CommonMarkParser
 source_suffix = {'.rst': 'restructuredtext',
