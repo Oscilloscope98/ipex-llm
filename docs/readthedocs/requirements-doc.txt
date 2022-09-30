@@ -11,7 +11,7 @@ cloudpickle==2.1.0
 ray[tune]==1.9.2
 ray==1.9.2
 torch==1.9.0
-Pygments==2.6.1
+Pygments==2.7
 setuptools==41.0.1
 docutils==0.17
 mock==1.0.1
