@@ -1,9 +1,18 @@
 root: index
 subtrees:
-  - caption: Chronos
-    entries:
+  - entries:
       - file: doc/Chronos/index
-      
-  - caption: Nano
-    entries:
+
+  - entries:
       - file: doc/Nano/index
+        subtrees:
+          - entries:
+            - file: doc/Nano/Overview/windows_guide
+            - file: doc/Nano/QuickStart/pytorch_train
+            - file: doc/Nano/QuickStart/pytorch_inference
+            - file: doc/Nano/QuickStart/tensorflow_train
+            - file: doc/Nano/QuickStart/tensorflow_inference
+            - file: doc/Nano/QuickStart/hpo
+            - file: doc/Nano/QuickStart/index
+            - file: doc/Nano/Howto/index
+            - file: doc/Nano/Overview/known_issues
