@@ -36,6 +36,9 @@ html_logo = "../image/bigdl_logo.png"
 html_theme_options = {
    "show_nav_level": 0
 }
+html_sidebars = {
+    "**": ["search-field.html", "sidebar-nav-bs.html", "sidebar-ethical-ads.html"]
+}
 
 # The suffix of source filenames.
 from recommonmark.parser import CommonMarkParser
