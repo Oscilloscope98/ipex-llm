@@ -4,7 +4,6 @@ Chronos
 This could be the Chronos landing page
 
 .. toctree::
-    :maxdepth: 1
     :hidden:
 
     Overview/chronos

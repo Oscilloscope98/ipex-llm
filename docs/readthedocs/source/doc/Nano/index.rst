@@ -4,9 +4,7 @@ Nano
 This could be the Nano landing page
 
 .. toctree::
-    :maxdepth: 1
     :hidden:
-    :caption: test
 
     Overview/windows_guide
     QuickStart/pytorch_train
