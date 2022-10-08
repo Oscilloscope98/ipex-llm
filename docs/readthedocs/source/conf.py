@@ -33,6 +33,9 @@ sys.path.insert(0, os.path.abspath("../../../python/nano/src/"))
 # -- Project information -----------------------------------------------------
 html_theme = "pydata_sphinx_theme"
 html_logo = "../image/bigdl_logo.png"
+html_theme_options = {
+   "show_nav_level": 0
+}
 
 # The suffix of source filenames.
 from recommonmark.parser import CommonMarkParser
