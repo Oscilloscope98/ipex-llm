@@ -34,10 +34,11 @@ sys.path.insert(0, os.path.abspath("../../../python/nano/src/"))
 html_theme = "pydata_sphinx_theme"
 html_logo = "../image/bigdl_logo.png"
 html_theme_options = {
-   "show_nav_level": 0
+   "show_nav_level": 0,
+   "header_links_before_dropdown": 1
 }
 html_sidebars = {
-    "**": ["search-field.html", "sidebar-nav-bs.html", "sidebar-ethical-ads.html"]
+    "**": ["search-field.html", "sidebar-nav-bs.html"]
 }
 
 # The suffix of source filenames.
@@ -132,6 +133,11 @@ exclude_patterns = ['_build']
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# add js functional to all pages
+html_js_files = [
+    'js/custom.js',
+] 
 
 # Custom sidebar templates, must be a dictionary that maps document namesan
 # to template names.
