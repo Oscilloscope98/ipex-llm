@@ -1,5 +1,9 @@
 [
     {
+        "version": "latest",
+        "url": "https://yuwentestdocs.readthedocs.io/en/vs-new/"
+    },
+    {
         "version": "v2.1.0",
         "url": "https://yuwentestdocs.readthedocs.io/en/vs-old/"
     }
