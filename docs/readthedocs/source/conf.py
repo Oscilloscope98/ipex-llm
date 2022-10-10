@@ -33,7 +33,12 @@ sys.path.insert(0, os.path.abspath("../../../python/nano/src/"))
 # -- Project information -----------------------------------------------------
 html_theme = "pydata_sphinx_theme"
 html_theme_options = {
-  "header_links_before_dropdown": 3
+  "header_links_before_dropdown": 3,
+     "switcher": {
+        "json_url": "https://raw.githubusercontent.com/Oscilloscope98/BigDL/vs-old/docs/readthedocs/source/_static/version.json",
+        "version_match": "v2.1.0"
+    },
+    "navbar_start": ["navbar-logo", "version-switcher"]
 }
 html_logo = "../image/bigdl_logo.png"
 
