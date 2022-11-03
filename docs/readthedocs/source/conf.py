@@ -282,4 +282,5 @@ nbsphinx_execute = 'never'
 # make output of graphviz diagram to svg
 graphviz_output_format = 'svg'
 
-mermaid_output_format="svg"
+# mermaid_output_format="svg"
+nbsphinx_requirejs_path=""
