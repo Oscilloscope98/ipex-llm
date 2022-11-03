@@ -64,6 +64,7 @@ html_logo = "../image/bigdl_logo.png"
 # hard code it for now, may change it to read from installed bigdl
 release = "latest"
 
+
 # The suffix of source filenames.
 from recommonmark.parser import CommonMarkParser
 source_suffix = {'.rst': 'restructuredtext',
@@ -113,7 +114,8 @@ extensions = [
     'sphinx_design',
     'nbsphinx',
     'nbsphinx_link',
-    'sphinx.ext.graphviz' # for embedded graphviz diagram
+    'sphinx.ext.graphviz', # for embedded graphviz diagram
+    'sphinxcontrib.mermaid'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -160,6 +162,7 @@ html_static_path = ['_static']
 # add js/css for customizing each page
 html_js_files = [
     'js/custom.js',
+    "https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js"
 ]
 html_css_files = [
     'css/custom.css',
@@ -278,3 +281,5 @@ nbsphinx_execute = 'never'
 
 # make output of graphviz diagram to svg
 graphviz_output_format = 'svg'
+
+mermaid_output_format="svg"
