@@ -23,6 +23,8 @@ from transformers import TextIteratorStreamer
 from transformers.tools.agents import StopSequenceCriteria
 from transformers.generation.stopping_criteria import StoppingCriteriaList
 
+from colorama import Fore
+
 from bigdl.llm import optimize_model
 
 SYSTEM_PROMPT = "A chat between a curious human <human> and an artificial intelligence assistant <bot>.\
@@ -57,7 +59,7 @@ def stream_chat(model,
     thread.start()
 
     output_str = []
-    print("BigDL-LLM: ", end="")
+    print(Fore.BLUE+"BigDL-LLM: "+Fore.RESET, end="")
     for partial_output_str in streamer:
         output_str.append(partial_output_str)
         # remove the last HUMAN_ID if exists
@@ -84,7 +86,7 @@ if __name__ == "__main__":
 
   while True:
       with torch.inference_mode():
-          user_input = input("\nInput: ")
+          user_input = input(Fore.GREEN+"\nHuman: "+Fore.RESET)
           if user_input == "stop": # let's stop the conversation when user input "stop"
               break
           stream_chat(model=model,
