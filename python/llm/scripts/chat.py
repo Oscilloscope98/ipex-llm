@@ -48,7 +48,7 @@ def stream_chat(model,
                 input_str,
                 chat_history):
     prompt = format_prompt(input_str, chat_history)
-    print(prompt)
+    # print(prompt)
     input_ids = tokenizer([prompt], return_tensors="pt")
     streamer = TextIteratorStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
     generate_kwargs = dict(input_ids, streamer=streamer, max_new_tokens=512, stopping_criteria=stopping_criteria)
