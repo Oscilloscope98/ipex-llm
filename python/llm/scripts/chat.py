@@ -75,7 +75,10 @@ if __name__ == "__main__":
 
   model_path = args.model_path
   
-  model = AutoModel.from_pretrained(model_path, trust_remote_code=True)
+  model = AutoModel.from_pretrained(model_path,
+                                    low_cpu_mem_usage=True,
+                                    torch_dtype="auto",
+                                    trust_remote_code=True)
   model = optimize_model(model)
 
   tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
