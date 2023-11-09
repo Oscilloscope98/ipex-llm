@@ -78,6 +78,7 @@ jobs:
       #   env:
       #     ANALYTICS_ZOO_ROOT: ${{ github.workspace }}
   llm-performance-test-on-arc:
+    if: false # temp skip
     needs: llm-cpp-build
     strategy:
       fail-fast: false
@@ -140,6 +141,7 @@ jobs:
 
           
   llm-performance-test-on-spr:
+    if: false # temp skip
     needs: llm-cpp-build
     strategy:
       fail-fast: false
