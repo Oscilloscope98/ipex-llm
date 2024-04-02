@@ -1331,5 +1331,7 @@ def _optimize_post(model, lightweight_bmm=False):
                         module.StableLmAttention,
                         stablelm_attention_forward
                         )
-
+        convert_forward(model,
+                        module.StableLmMLP,
+                        llama_mlp_forward)
     return model
