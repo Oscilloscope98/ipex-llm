@@ -91,21 +91,26 @@ def optimize_llm_pre(model: torch.nn.Module, qtype):
         # for Qwen2-7B-Insturct, divide lm_head into 2 parts
         if model.config.hidden_size == 3584 and model.config.vocab_size == 152064:
             print('------------lm head split------------')
-            new_linear_0 = torch.nn.Linear(0, 0, bias=False)
-            new_weight_0 = torch.nn.Parameter(model.lm_head.weight[:, :1792], requires_grad=False)
-            new_linear_0.weight = new_weight_0
-            new_linear_0.in_features = new_weight_0.size(1)
-            new_linear_0.out_features = new_weight_0.size(0)
-            model.lm_head_0 = new_linear_0
-            print(f"weight size 0: ({new_weight_0.size(0)}, {new_weight_0.size(1)})")
- 
-            new_linear_1 = torch.nn.Linear(0, 0, bias=False)
-            new_weight_1 = torch.nn.Parameter(model.lm_head.weight[:, 1792:], requires_grad=False)
-            new_linear_1.weight = new_weight_1
-            new_linear_1.in_features = new_weight_1.size(1)
-            new_linear_1.out_features = new_weight_1.size(0)
-            model.lm_head_1 = new_linear_1
-            print(f"weight size 1: ({new_weight_1.size(0)}, {new_weight_1.size(1)})")
+            split_num = 7
+            split_size = model.lm_head.weight.size(1) // split_num // 2 * 2
+
+            for i in range(split_num):
+                new_linear = torch.nn.Linear(0, 0, bias=False)
+
+                start_idx = i * split_size
+                if i == split_num - 1:
+                    end_idx = model.lm_head.weight.size(1)
+                else:
+                    end_idx = (i + 1) * split_size
+                new_weight = torch.nn.Parameter(model.lm_head.weight[:, start_idx:end_idx], requires_grad=False)
+
+                new_linear.weight = new_weight
+                new_linear.in_features = new_weight.size(1)
+                new_linear.out_features = new_weight.size(0)
+
+                setattr(model, f'lm_head_{i}', new_linear)
+                print(f"weight size {i}: ({new_weight.size(0)}, {new_weight.size(1)})")
+    
             print('------------lm head split finish------------')
  
             del model.lm_head

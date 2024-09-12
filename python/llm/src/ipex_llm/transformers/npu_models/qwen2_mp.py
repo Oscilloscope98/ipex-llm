@@ -918,21 +918,23 @@ class PrefillRunner:
                 " to max_prompt_len {self.max_prompt_len}"
             ),
         )
-        pad_len = self.max_prompt_len - seq_len
-        hidden_states = F.pad(hidden_states.to(torch.float16), (0, 0, 0, pad_len), value=0.0)
-        position_ids = F.pad(position_ids, (0, pad_len), value=0)
-        attention_mask = F.pad(
-            attention_mask.to(torch.float16),
-            (0, pad_len, 0, pad_len),
-            value=torch.finfo(torch.float16).min,
-        )
+        # pad_len = self.max_prompt_len - seq_len
+        # hidden_states = F.pad(hidden_states.to(torch.float16), (0, 0, 0, pad_len), value=0.0)
+        # position_ids = F.pad(position_ids, (0, pad_len), value=0)
+        # attention_mask = F.pad(
+        #     attention_mask.to(torch.float16),
+        #     (0, pad_len, 0, pad_len),
+        #     value=torch.finfo(torch.float16).min,
+        # )
 
-        args = (hidden_states, position_ids, attention_mask, past_key_value)
-        self.prefill_input_queue.put(args)
-        hidden_states, past_key_value = self.prefill_result_queue.get()
-        past_key_value.shrink(seq_len, self.transpose_value_cache)
-        hidden_states = hidden_states[:, :seq_len, :]
-        return hidden_states, past_key_value
+        # args = (hidden_states, position_ids, attention_mask, past_key_value)
+        # self.prefill_input_queue.put(args)
+        # hidden_states, past_key_value = self.prefill_result_queue.get()
+        # past_key_value.shrink(seq_len, self.transpose_value_cache)
+        # hidden_states = hidden_states[:, :seq_len, :]
+        # return hidden_states, past_key_value
+        self.prefill_input_queue.put((hidden_states, position_ids, attention_mask, past_key_value))
+        return self.prefill_result_queue.get()
 
     def shutdown(self):
         self.prefill_input_queue.put("stop")
@@ -1108,9 +1110,24 @@ def qwen2_casullm_forward(
     # ipex-llm change start
     hidden_states = reshape_lm_head_input(hidden_states)
     if self.config.hidden_size == 3584 and self.config.vocab_size == 152064:
-        hidden_states_0 = self.lm_head_0(hidden_states[:, :, :1792])
-        hidden_states_1 = self.lm_head_1(hidden_states[:, :, 1792:])
-        logits = hidden_states_0 + hidden_states_1
+        split_num = 28
+        split_size = hidden_states.size(-1) // split_num // 2 * 2
+
+        logits = None
+        for i in range(split_num):
+            start_idx = i * split_size
+            if i == split_num - 1:
+                end_idx = hidden_states.size(-1)
+            else:
+                end_idx = (i + 1) * split_size
+
+            hidden_states_slice = hidden_states[:, :, start_idx:end_idx]
+            logits_slice = getattr(self, f'lm_head_{i}')(hidden_states_slice)
+
+            if logits is None:
+                logits = logits_slice
+            else:
+                logits += logits_slice
     else:
         logits = self.lm_head(hidden_states)
     # ipex-llm change end
