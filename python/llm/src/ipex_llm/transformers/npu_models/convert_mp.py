@@ -88,6 +88,28 @@ def optimize_llm_pre(model: torch.nn.Module, qtype):
         from ipex_llm.transformers.npu_models.qwen2_mp import split_mlp_forward
         model.apply(split_mlp_down_proj)
 
+        # for Qwen2-7B-Insturct, divide lm_head into 2 parts
+        if model.config.hidden_size == 3584 and model.config.vocab_size == 152064:
+            print('------------lm head split------------')
+            new_linear_0 = torch.nn.Linear(0, 0, bias=False)
+            new_weight_0 = torch.nn.Parameter(model.lm_head.weight[:, :1792], requires_grad=False)
+            new_linear_0.weight = new_weight_0
+            new_linear_0.in_features = new_weight_0.size(1)
+            new_linear_0.out_features = new_weight_0.size(0)
+            model.lm_head_0 = new_linear_0
+            print(f"weight size 0: ({new_weight_0.size(0)}, {new_weight_0.size(1)})")
+ 
+            new_linear_1 = torch.nn.Linear(0, 0, bias=False)
+            new_weight_1 = torch.nn.Parameter(model.lm_head.weight[:, 1792:], requires_grad=False)
+            new_linear_1.weight = new_weight_1
+            new_linear_1.in_features = new_weight_1.size(1)
+            new_linear_1.out_features = new_weight_1.size(0)
+            model.lm_head_1 = new_linear_1
+            print(f"weight size 1: ({new_weight_1.size(0)}, {new_weight_1.size(1)})")
+            print('------------lm head split finish------------')
+ 
+            del model.lm_head
+
     # lm_head to cpu optimization
     if cpu_lm_head:
         # disable the optimization by default

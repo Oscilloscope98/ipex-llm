@@ -1107,8 +1107,13 @@ def qwen2_casullm_forward(
     hidden_states = outputs[0]
     # ipex-llm change start
     hidden_states = reshape_lm_head_input(hidden_states)
+    if self.config.hidden_size == 3584 and self.config.vocab_size == 152064:
+        hidden_states_0 = self.lm_head_0(hidden_states[:, :, :1792])
+        hidden_states_1 = self.lm_head_1(hidden_states[:, :, 1792:])
+        logits = hidden_states_0 + hidden_states_1
+    else:
+        logits = self.lm_head(hidden_states)
     # ipex-llm change end
-    logits = self.lm_head(hidden_states)
     logits = logits.float()
 
     loss = None
