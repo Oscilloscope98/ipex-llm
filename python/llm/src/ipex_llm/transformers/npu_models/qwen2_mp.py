@@ -1110,7 +1110,7 @@ def qwen2_casullm_forward(
     # ipex-llm change start
     hidden_states = reshape_lm_head_input(hidden_states)
     if self.config.hidden_size == 3584 and self.config.vocab_size == 152064:
-        split_num = 28
+        split_num = 7
         split_size = hidden_states.size(-1) // split_num // 2 * 2
 
         logits = None
