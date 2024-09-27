@@ -160,6 +160,11 @@ class QuantizedLinear(torch.nn.Module):
         self.scale = Parameter(scale * math.sqrt(self.inC), requires_grad=False)
         self.bias = bias
         self.op_id = str(uuid.uuid4())
+        # print('-'*10)
+        # print(f'weight size: {self.weight.shape}')
+        # print(f'scale size: {self.scale.shape}')
+        # print(f'self scale size: {self.scale.shape}')
+        # print('-'*10)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Torch module forward method.
@@ -192,6 +197,84 @@ class QuantizedLinear(torch.nn.Module):
             )
 
         out = run_matmul(x, self.weight.data, self.scale.data, self.op_id)
+
+        if self.bias is None:
+            return out
+        return out + self.bias
+
+
+class DequantizedLinear(torch.nn.Module):
+    """Torch Quantized Linear operation NPU backend."""
+
+    def __init__(
+        self,
+        weight: torch.Tensor,
+        scale: torch.Tensor,
+        bias: Optional[torch.Tensor] = None,
+    ):
+        """Initialize the DequantizedLinear class.
+
+        Args:
+            weight (torch.Tensor): Linear operation quantized weight
+            scale (torch.Tensor): Quantization scale
+            bias (Optional[torch.Tensor], optional): Linear operation optional bias.
+                                                     Defaults to None.
+
+        Raises:
+            RuntimeError: Quantized weight must be in torch.int8 format
+        """
+        super().__init__()
+
+
+        if weight.dtype not in (torch.int8, torch.uint8):
+            invalidInputError(
+                False,
+                (
+                    f"Quantized weight must be in torch.(u)int8"
+                    " dtype instead of {self.weight.dtype}"
+                )
+            )
+        if weight.dtype == torch.uint8:
+            weight = weight.view(torch.int8)
+            high_4bits = weight >> 4
+            low_4bits = (weight << 4) >> 4
+
+            # print('-'*50)
+            # print(f'scale dtype: {scale.dtype}')
+            # print(f'high_4bits shape: {high_4bits.shape}, dtype: {high_4bits.dtype}')
+            # print(f'low_4bits shape: {low_4bits.shape}')
+            combined_weight = torch.cat((low_4bits.unsqueeze(2), high_4bits.unsqueeze(2)), dim=2)
+            decompressed_weight = combined_weight.view(combined_weight.size(0), -1)
+            # print(f'decompressed_weight shape: {decompressed_weight.shape}, dype: {decompressed_weight.dtype}')
+            # print(f'scale shape: {scale.shape}')
+            dequantized_weight = decompressed_weight.to(torch.float32) * torch.unsqueeze(scale.to(torch.float32), dim=1)
+            self.weight = Parameter(dequantized_weight, requires_grad=False).contiguous()
+            # print('-'*50)
+        else:
+            dequantized_weight = weight.to(torch.float32) * torch.unsqueeze(scale.to(torch.float32), dim=1)
+            self.weight = Parameter(dequantized_weight.to(torch.float32), requires_grad=False).contiguous()
+
+        # print('-'*10)
+        # print(f'weight size: {self.weight.shape}')
+        # print('-'*10)
+
+        self.bias = bias
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Torch module forward method.
+
+        Args:
+            x (torch.Tensor): Input tensor
+
+        Raises:
+            RuntimeError: Training is not supported for QuantizedLinear layer.
+                          Use `.eval()` to do inference only
+
+        Returns:
+            torch.Tensor: result
+        """
+
+        out = torch.matmul(x.to(torch.float32), torch.transpose(self.weight.data, 0, 1))
 
         if self.bias is None:
             return out
